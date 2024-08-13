@@ -10,6 +10,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api/personas', personaRoutes);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log('Servidor escuchando en el puerto 3000');
 });
