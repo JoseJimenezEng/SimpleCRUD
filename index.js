@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: 'https://clientcrud.netlify.app'
+  origin: process.env.CLIENT_URL
 }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,5 +15,5 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/personas', personaRoutes);
 
 app.listen(process.env.PORT, () => {
-  console.log('Servidor escuchando en el puerto 3000');
+  console.log('Servidor escuchando');
 });
