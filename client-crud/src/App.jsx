@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [personas, setPersonas] = useState([]); 
+  const [personas, setPersonas] = useState([]);
   const [formData, setFormData] = useState({ name: '', email: '', picture: '' });
   const [selectedId, setSelectedId] = useState(null);
   const [action, setAction] = useState('');
@@ -11,17 +12,14 @@ function App() {
     try {
       const response = await axios.get('https://simplecrud-evva.onrender.com/api/personas');
       setPersonas(response.data || []);
-      console.log(response) 
+      console.log(response);
     } catch (error) {
       console.log("Error al obtener personas:", error);
-      setPersonas([]); 
+      setPersonas([]);
     }
   };
 
-  useEffect(() => {
-    fetchPersonas();
-  }, []);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,7 +27,9 @@ function App() {
         await axios.post('https://simplecrud-evva.onrender.com/api/personas', formData);
       } else if (action === 'PUT' && selectedId) {
         await axios.put(`https://simplecrud-evva.onrender.com/api/personas/${selectedId}`, formData);
+        console.log(selectedId)
         setSelectedId(null);
+        console.log(formData)
       } else if (action === 'DELETE' && selectedId) {
         await axios.delete(`https://simplecrud-evva.onrender.com/api/personas/${selectedId}`);
         setSelectedId(null);
@@ -63,6 +63,7 @@ function App() {
             <th>Nombre</th>
             <th>Email</th>
             <th>Imagen</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -71,16 +72,28 @@ function App() {
               <td>{persona.name}</td>
               <td>{persona.email}</td>
               <td><img src={persona.picture} alt={persona.name} width="50" /></td>
+              <td className='d-flex justify-content-around'>
+                <button
+                  className="btn btn-warning btn-sm"
+                  onClick={() => handleAction('PUT', persona)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="btn btn-danger btn-sm ml-2"
+                  onClick={() => handleAction('DELETE', persona)}
+                >
+                  Eliminar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="d-flex justify-content-between mt-4">
+      <div className="d-flex justify-content-around mt-4">
         <button className="btn btn-primary" onClick={() => handleAction('POST')}>Agregar Persona</button>
         <button className="btn btn-success" onClick={fetchPersonas}>Ver Personas</button>
-        <button className="btn btn-warning" onClick={() => handleAction('PUT')}>Editar Persona</button>
-        <button className="btn btn-danger" onClick={() => handleAction('DELETE')}>Eliminar Persona</button>
       </div>
 
       {action && (
@@ -120,16 +133,9 @@ function App() {
             </>
           )}
 
-          {action === 'DELETE' && (
+          {action === 'DELETE' && selectedId && (
             <div className="mb-3">
-              <label className="form-label">ID de la Persona a Eliminar</label>
-              <input
-                type="text"
-                className="form-control"
-                value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                required
-              />
+              <label className="form-label">¿Estás seguro de que deseas eliminar esta persona?</label>
             </div>
           )}
 
