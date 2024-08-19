@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: 'https://clientcrud.netlify.app'
 }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
