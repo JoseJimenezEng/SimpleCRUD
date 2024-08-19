@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./config/db');
 const personaRoutes = require('./routes/personaRoutes');
-const cors = require('cors');  // Importa el middleware CORS
+const cors = require('cors');  
 
 const app = express();
 app.use(cors()); 
